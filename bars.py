@@ -22,7 +22,8 @@ def get_smallest_bar(restaurants_list):
 
 
 def calc_distance(x1, y1, x2, y2):
-    return ((x2 - x1) ** 2) + ((y2 - y1) ** 2) ** 0.5
+    distance = ((x2 - x1) ** 2) + ((y2 - y1) ** 2) ** 0.5
+    return distance
 
 
 def get_closest_bar(restaurants_list, longitude, latitude):
