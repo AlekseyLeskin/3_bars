@@ -7,18 +7,22 @@ def load_data(file_path):
         return json.load(open_file)
 
 
-def get_biggest_bar(restaurants_list):
-    biggest_bar = max(restaurants_list['features'],
-                      key=lambda seats_count:
-                      seats_count['properties']['Attributes']['SeatsCount'])
-    return biggest_bar['properties']['Attributes']['Name']
+def get_biggest_bar(data_for_restaurants):
+    biggest_bar = max(
+        data_for_restaurants,
+        key=lambda seats_count:
+        seats_count['properties']['Attributes']['SeatsCount'],
+    )
+    return biggest_bar
 
 
-def get_smallest_bar(restaurants_list):
-    smallest_bar = min(restaurants_list['features'],
-                       key=lambda seats_count:
-                       seats_count['properties']['Attributes']['SeatsCount'])
-    return smallest_bar['properties']['Attributes']['Name']
+def get_smallest_bar(data_for_restaurants):
+    smallest_bar = min(
+        data_for_restaurants,
+        key=lambda seats_count:
+        seats_count['properties']['Attributes']['SeatsCount'],
+    )
+    return smallest_bar
 
 
 def calc_distance(x1, y1, x2, y2):
@@ -26,14 +30,18 @@ def calc_distance(x1, y1, x2, y2):
     return distance
 
 
-def get_closest_bar(restaurants_list, longitude, latitude):
-    nearest_bar = min(restaurants_list['features'],
-                      key=lambda restaurant:
-                      calc_distance(longitude,
-                                    latitude,
-                                    restaurant['geometry']['coordinates'][0],
-                                    restaurant['geometry']['coordinates'][1]))
-    return nearest_bar['properties']['Attributes']['Name']
+def get_closest_bar(data_for_restaurants, longitude, latitude):
+    nearest_bar = min(
+        data_for_restaurants,
+        key=lambda restaurant:
+        calc_distance(
+            longitude,
+            latitude,
+            restaurant['geometry']['coordinates'][0],
+            restaurant['geometry']['coordinates'][1],
+        ),
+    )
+    return nearest_bar
 
 
 if __name__ == '__main__':
@@ -42,15 +50,27 @@ if __name__ == '__main__':
             user_file_path = input('Укажите путь до файла: ')
         else:
             user_file_path = sys.argv[1]
-        file_data = load_data(user_file_path)
-        print('Самый большой бар', get_biggest_bar(file_data))
-        print('Самый маленький бар', get_smallest_bar(file_data))
-        user_longitude, user_latitude = \
-            input('\nВведите через пробел '
-                  'координаты текущего местоположения: \n').split(" ")
-        print('Самый близкий бар:',
-              str(get_closest_bar(file_data,
-                                  float(user_longitude),
-                                  float(user_latitude))))
+        try:
+            list_of_restaurants = load_data(user_file_path)['features']
+        except json.decoder.JSONDecodeError as e:
+            print('Некорректный JSON')
+            raise SystemExit(1)
+        print('Самый большой бар', get_biggest_bar(list_of_restaurants)['properties']['Attributes']['Name'])
+        print('Самый маленький бар', get_smallest_bar(list_of_restaurants)['properties']['Attributes']['Name'])
+        try:
+            user_longitude, user_latitude = [float(point) for point in input(
+                '\nВведите через пробел '
+                'координаты текущего местоположения: \n'
+            ).split(' ')]
+
+        except (ValueError, TypeError) as e:
+            print('\nНекорректный формат координат.'
+                  '\nПример корректного ввода: "37.635709999610896 55.805575000158512" ')
+            raise SystemExit(1)
+        print('Самый близкий бар:', str(get_closest_bar(
+                                            list_of_restaurants,
+                                            float(user_longitude),
+                                            float(user_latitude),
+                                        )['properties']['Attributes']['Name']))
     except FileNotFoundError as e:
-        print("Файла не существует")
+        print('Файла не существует')
