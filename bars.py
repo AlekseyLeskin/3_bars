@@ -55,8 +55,16 @@ if __name__ == '__main__':
         except json.decoder.JSONDecodeError as e:
             print('Некорректный JSON')
             raise SystemExit(1)
-        print('Самый большой бар', get_biggest_bar(list_of_restaurants)['properties']['Attributes']['Name'])
-        print('Самый маленький бар', get_smallest_bar(list_of_restaurants)['properties']['Attributes']['Name'])
+        print(
+            'Самый большой бар',
+            get_biggest_bar(list_of_restaurants)
+            ['properties']['Attributes']['Name'],
+        )
+        print(
+            'Самый маленький бар',
+            get_smallest_bar(list_of_restaurants)
+            ['properties']['Attributes']['Name'],
+        )
         try:
             user_longitude, user_latitude = [float(point) for point in input(
                 '\nВведите через пробел '
@@ -65,7 +73,8 @@ if __name__ == '__main__':
 
         except (ValueError, TypeError) as e:
             print('\nНекорректный формат координат.'
-                  '\nПример корректного ввода: "37.635709999610896 55.805575000158512" ')
+                  '\nПример корректного ввода: '
+                  '"37.635709999610896 55.805575000158512" ')
             raise SystemExit(1)
         print('Самый близкий бар:', str(get_closest_bar(
                                             list_of_restaurants,
