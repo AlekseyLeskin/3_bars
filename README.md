@@ -13,9 +13,8 @@
 
 ```bash
 
-$ python bars.py # possibly requires call of python3 executive instead of just python
+$ python bars.py bars.json# possibly requires call of python3 executive instead of just python
 # Пример ответа скрипта:
-Укажите путь до файла: bars.json
 Самый большой бар Бар «Джонни Грин Паб»
 Самый маленький бар Юнион Джек
 

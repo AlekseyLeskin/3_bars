@@ -47,38 +47,36 @@ def get_closest_bar(data_for_restaurants, longitude, latitude):
 
 if __name__ == '__main__':
     try:
-        if len(sys.argv) == 1:
-            user_file_path = input('Укажите путь до файла: ')
-        else:
-            user_file_path = sys.argv[1]
+        user_file_path = sys.argv[1]
+    except IndexError:
+        exit('Не указан путь до файла')
+    try:
         list_of_restaurants = load_data(user_file_path)['features']
-        print(
-            'Самый большой бар',
-            get_biggest_bar(list_of_restaurants)
-            ['properties']['Attributes']['Name'],
-        )
-        print(
-            'Самый маленький бар',
-            get_smallest_bar(list_of_restaurants)
-            ['properties']['Attributes']['Name'],
-        )
-        user_longitude, user_latitude = [float(point) for point in input(
+    except FileNotFoundError:
+        exit('Файла не существует')
+    except json.decoder.JSONDecodeError:
+        exit('Некорректный JSON')
+    print(
+        'Самый большой бар',
+        get_biggest_bar(list_of_restaurants)
+        ['properties']['Attributes']['Name'],
+    )
+    print(
+        'Самый маленький бар',
+        get_smallest_bar(list_of_restaurants)
+        ['properties']['Attributes']['Name'],
+    )
+    try:
+        user_longitude, user_latitude = input(
             '\nВведите через пробел '
             'координаты текущего местоположения: \n'
-        ).split(' ')]
-        print('Самый близкий бар:', str(get_closest_bar(
-                                            list_of_restaurants,
-                                            float(user_longitude),
-                                            float(user_latitude),
-                                        )['properties']['Attributes']['Name']))
-    except FileNotFoundError:
-        print('Файла не существует')
-        exit()
-    except json.decoder.JSONDecodeError:
-        print('Некорректный JSON')
-        exit()
+        ).split(' ')
     except (ValueError, TypeError):
-        print('\nНекорректный формат координат.'
-              '\nПример корректного ввода: '
-              '"37.635709999610896 55.805575000158512" ')
-        exit()
+        exit('\nНекорректный формат координат.'
+             '\nПример корректного ввода: '
+             '"37.635709999610896 55.805575000158512" ')
+    print('Самый близкий бар:', str(get_closest_bar(
+                                        list_of_restaurants,
+                                        float(user_longitude),
+                                        float(user_latitude),
+                                    )['properties']['Attributes']['Name']))
