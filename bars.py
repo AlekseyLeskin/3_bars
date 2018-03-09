@@ -62,10 +62,11 @@ if __name__ == '__main__':
         get_smallest_bar(bars)['properties']['Attributes']['Name'],
     )
     try:
-        user_longitude, user_latitude = [float(point) for point in input(
+        custom_coordinates = [float(point) for point in input(
             '\nВведите через пробел '
             'координаты текущего местоположения: \n'
         ).split(' ')]
+        user_longitude, user_latitude = custom_coordinates
     except (ValueError, TypeError):
         exit('\nНекорректный формат координат.'
              '\nПример корректного ввода: '
