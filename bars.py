@@ -47,26 +47,21 @@ if __name__ == '__main__':
     try:
         user_file_path = sys.argv[1]
         bars = load_data(user_file_path)['features']
-    except IndexError:
-        exit('Не указан путь до файла')
-    except FileNotFoundError:
-        exit('Файла не существует')
-    except json.decoder.JSONDecodeError:
-        exit('Некорректный JSON')
-    print(
-        'Самый большой бар',
-        get_biggest_bar(bars)['properties']['Attributes']['Name'],
-    )
-    print(
-        'Самый маленький бар',
-        get_smallest_bar(bars)['properties']['Attributes']['Name'],
-    )
-    try:
+        print(
+            'Самый большой бар',
+            get_biggest_bar(bars)['properties']['Attributes']['Name'],
+        )
+        print(
+            'Самый маленький бар',
+            get_smallest_bar(bars)['properties']['Attributes']['Name'],
+        )
         custom_coordinates = [float(point) for point in input(
             '\nВведите через пробел '
             'координаты текущего местоположения: \n'
         ).split(' ')]
         user_longitude, user_latitude = custom_coordinates
+    except (json.decoder.JSONDecodeError, FileNotFoundError, IndexError):
+        exit('Некорректный JSON')
     except (ValueError, TypeError):
         exit('\nНекорректный формат координат.'
              '\nПример корректного ввода: '
