@@ -47,14 +47,6 @@ if __name__ == '__main__':
     try:
         user_file_path = sys.argv[1]
         bars = load_data(user_file_path)['features']
-        print(
-            'Самый большой бар',
-            get_biggest_bar(bars)['properties']['Attributes']['Name'],
-        )
-        print(
-            'Самый маленький бар',
-            get_smallest_bar(bars)['properties']['Attributes']['Name'],
-        )
         custom_coordinates = [float(point) for point in input(
             '\nВведите через пробел '
             'координаты текущего местоположения: \n'
@@ -66,6 +58,16 @@ if __name__ == '__main__':
         exit('\nНекорректный формат координат.'
              '\nПример корректного ввода: '
              '"37.635709999610896 55.805575000158512" ')
+
+    print(
+        'Самый большой бар',
+        get_biggest_bar(bars)['properties']['Attributes']['Name'],
+    )
+    print(
+        'Самый маленький бар',
+        get_smallest_bar(bars)['properties']['Attributes']['Name'],
+    )
+
     the_closest_bar = get_closest_bar(
         bars,
         user_longitude,
